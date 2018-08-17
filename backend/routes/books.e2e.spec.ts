@@ -83,6 +83,12 @@ describe('Books Module API Tests', async () => {
                 .expect(HTTP_STATUS.CONFLICT);
         });
 
+        afterAll(async (done) => {
+            await BookModel.remove({});
+            (app as any).close();
+            done();
+        });
+
     });
 
 });

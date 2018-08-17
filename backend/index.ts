@@ -23,8 +23,8 @@ app.use((exception: HttpException | Error, req, res, next) => {
     }
 });
 
-const server = app.listen('3000', () => {
-    console.log('server listening on PORT 3000');
+const server = app.listen(process.env.PORT || 3000, () => {
+    console.log(`server listening on PORT ${process.env.PORT}`);
 });
 
 module.exports = server;
