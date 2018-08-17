@@ -2,6 +2,7 @@ import { Book } from '../interfaces/book.interface';
 import { BookModel } from '../models/book.model';
 import { HttpException } from '../shared/httpException';
 import { HTTP_STATUS } from '../shared/status.enum';
+import { Types } from 'mongoose';
 
 export async function createBook(book: Book): Promise<Book> {
     validateBook(book);
@@ -10,9 +11,15 @@ export async function createBook(book: Book): Promise<Book> {
     return book;
 }
 
+export async function deleteBook(id): Promise<Boolean> {
+    await ensureExistance(id);
+    await BookModel.remove({_id: id});
+    return true;
+}
+
 export async function findByName(name: String): Promise<Book> {
-    const book = await BookModel.findOne({ name: name });
-    return book;
+    return await BookModel.findOne({ name: name });
+    
 }
 
 export function validateBook(book: Book): Boolean {
@@ -34,4 +41,14 @@ export async function checkDuplicate(book: Book): Promise<Boolean> {
         throw new HttpException('book already exist', HTTP_STATUS.CONFLICT);
     }
     return false;
+}
+
+export async function ensureExistance(id): Promise<Book> {
+    console.log(id);
+    const book = await BookModel.findById(id);
+    console.log(book);
+    if(!book){
+        throw new HttpException('book not found', HTTP_STATUS.NOT_FOUND);
+    }
+    return book;
 }

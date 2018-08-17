@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createBook } from '../services/books.service';
+import { createBook, deleteBook } from '../services/books.service';
 import { HttpException } from '../shared/httpException';
 import { HTTP_STATUS } from '../shared/status.enum';
 
@@ -14,5 +14,14 @@ router.post('/', async (req, res, next) => {
         next(exception);
     }
 });
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        await deleteBook(req.params.id);
+        res.status(HTTP_STATUS.SUCCESS).send('true');
+    } catch (exception) {
+        next(exception);
+    }
+})
 
 export const booksRouter = router;
