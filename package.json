@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js",
+    "test": "jest --runInBand --forceExit"
   },
   "dependencies": {
     "@types/body-parser": "^1.17.0",

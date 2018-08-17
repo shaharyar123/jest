@@ -5,7 +5,6 @@ import { HTTP_STATUS } from "../shared/status.enum";
 import { checkDuplicate } from './books.service';
 import { BookModel } from "../models/book.model";
 import { connect, disconnect } from "mongoose";
-import { AsyncResource } from "async_hooks";
 
 const book: Book = {
     name: "Percy Jackson",
