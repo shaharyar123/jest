@@ -1,0 +1,37 @@
+import { Book } from '../interfaces/book.interface';
+import { BookModel } from '../models/book.model';
+import { HttpException } from '../shared/httpException';
+import { HTTP_STATUS } from '../shared/status.enum';
+
+export async function createBook(book: Book): Promise<Book> {
+    validateBook(book);
+    await checkDuplicate(book);
+    await new BookModel(book).save();
+    return book;
+}
+
+export async function findByName(name: String): Promise<Book> {
+    const book = await BookModel.findOne({ name: name });
+    return book;
+}
+
+export function validateBook(book: Book): Boolean {
+    if (!book.name) {
+        throw new HttpException('name is required', HTTP_STATUS.BAD_REQUEST);
+    }
+    if (!book.IBAN) {
+        throw new HttpException('IBAN is required', HTTP_STATUS.BAD_REQUEST);
+    }
+    if (!book.author) {
+        throw new HttpException('author is required', HTTP_STATUS.BAD_REQUEST);
+    }
+    return true;
+}
+
+export async function checkDuplicate(book: Book): Promise<Boolean> {
+    const duplicate = await findByName(book.name);
+    if (duplicate) {
+        throw new HttpException('book already exist', HTTP_STATUS.CONFLICT);
+    }
+    return false;
+}
